@@ -81,3 +81,14 @@ Each phase ends with a check that has to pass, measured, before the next one sta
 
 - **Does your wife have sample exam questions or the exam format** (multiple choice or written)?
   They make the best P5 set, and they decide how the RAG app should answer.
+
+## Status (2026-10-09)
+
+**Changed from D3–D4 at your request:** instead of a vision-model pipeline, I read all 152 photos myself
+and wrote each one as Markdown (`kb/_pages/NNN.md`). `scripts/assemble_kb.py` groups them into
+13 documents in `kb/` with `INDEX.md`; `kb/glossary.md` is written by hand. Missing pages: Homecare p.15,
+the CTV2/CTV3 appendix p.3–4, the 2026–2030 strategy deck p.1–3. For two-page photos of the 60-page
+introduction deck, page numbers are approximate.
+
+**Next:** `newdata/` (gitignored) holds more sources: an annual report 2025, Q2/2026 results, four Word
+knowledge files, four .txt files and five more zips of photos. Then P4 review and the P5 question set.
