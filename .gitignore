@@ -16,3 +16,6 @@ __pycache__/
 # source documents (Techcombank material) stay local
 docs/source/
 *.zip
+
+# the knowledge base built from the photos (internal material)
+kb/
