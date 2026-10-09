@@ -92,3 +92,15 @@ introduction deck, page numbers are approximate.
 
 **Next:** `newdata/` (gitignored) holds more sources: an annual report 2025, Q2/2026 results, four Word
 knowledge files, four .txt files and five more zips of photos. Then P4 review and the P5 question set.
+
+## Status — wave 2 (2026-10-09)
+
+`newdata/` (gitignored) added 54 photos (a 46-page PDF of newsletter summaries, 8-page wePRO-AI notes),
+4 Word knowledge files, 4 .txt dumps of internal posts and 2 PDFs (annual report 2025, Q2/2026 results).
+`scripts/build_kb.py` now builds all of `kb/` (24 documents, ~364k words). Dedup: 22 of 364 posts were
+previews or copies of a longer post; two wave-1 summaries are replaced by their wave-2 detailed versions.
+Facts repeated across separate documents are kept on purpose (answers cite whichever fits).
+
+**Delivery changed:** the user will use a Claude Project on claude.ai (his wife asks by iPhone photo),
+not a RAG app from this repo. `kb/PROJECT_INSTRUCTIONS.md` is the project instructions; `out/tcb-wepro-kb.zip`
+holds the files to upload.
