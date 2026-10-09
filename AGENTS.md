@@ -1,0 +1,108 @@
+# AGENTS.md — tcb-wepro
+
+This is an **operonx** project (made with operonx 1.18.1). The logic is
+Python functions (ops), wired into graphs, which an application runs as
+services and jobs.
+
+## Before you write code
+
+1. Read `.operonx/guide/README.md`. It indexes the guide of every installed
+   operonx package (core, and operonx-agents or operonx-kb when added), and
+   every example in them is tested against the installed version.
+2. Before you use an operonx API, re-read the guide page that covers it.
+   Do not write an operonx API from memory.
+3. Read `app/main.py`. It is the map of the product.
+
+## The ladder
+
+- **op**: `@op` in `ops.py`. One step of logic; it returns a dict literal.
+- **graph**: `@graph` in `graph.py`. Wires ops with `>>`. `ingress()` and
+  `egress()` are its doors: items in, items out.
+- **Job**: runs a graph once per item of its `items` (a list, a function
+  that yields them, or a `.jsonl` file) and keeps every result in its
+  record. `reduce=` runs one graph over all the results; `steps=[...]`
+  runs jobs in order as one command.
+- **Service**: a graph behind `http(...)`, `websocket(...)`, `webhook(...)`
+  or `schedule(...)`.
+- **Application**: `APP` in `app/main.py`. Declare every service and job
+  there.
+- **operonx.toml**: only points the CLIs at `APP`, plus `[tracing]`. Never
+  put `[[serve]]` blocks in it.
+
+## Never define a `@graph` inside a function
+
+Every `@graph` is defined at module level in `graph.py`. No factory that
+builds a graph in a nested `def` and returns it:
+
+```python
+# no
+def build_answer_flow(answer, k=8):
+    @graph
+    def answer_flow(): ...
+
+    return answer_flow
+
+
+# yes
+@graph
+def answer_flow(question, k):  # a setting is a graph input
+    ...
+```
+
+- A setting (`k`, a model name, a threshold) is a graph input or an op
+  setting, never a closure variable.
+- A different shape is a different module-level graph (`dense_search`,
+  `hybrid_search`), or one graph with an `if_` branch. Pick which one to
+  run in `app/main.py`, not by generating graphs.
+- Keep the edges: `START >> a >> b >> END` is written out, always.
+
+## Layout
+
+- One feature is one folder: `src/<feature>/graph.py` (wiring only: no
+  logic, no I/O, no Python `if`) and `src/<feature>/ops.py` (the logic).
+  Private helpers go in `src/<feature>/_<name>.py`.
+- Imports go one way: `app/` → `graph.py` → `ops.py` → helpers. Nothing in
+  `src/` imports `app/`, and no feature imports another feature's graph.
+- Reach models and stores by their key in `resources.yaml`
+  (`LLMOp.of(resource="assistant")`). Never build a client in code.
+- Secrets live only in `.env`, as `${VAR}` in `resources.yaml`. Add every
+  new name to `.env.example`. Never commit `.env`.
+- Tests go in `tests/`. Call an op directly (`my_op(x=1)()`), run a graph
+  with `Operon` or a `Job`, and never call a real model: use a fake one.
+
+## Commands
+
+```bash
+uv run pytest                 # the tests: keep them green
+uv run operonx serve --list   # every service, and where it listens
+uv run operonx run --list     # every job
+uv run operonx serve          # serve every service
+uv run operonx run NAME       # run one job
+```
+
+## Rules
+
+- Never `print()`. Log with `from operonx.core.loggings import LOGGER`.
+- Let names come from variables: `reply = chat(text=text)` is named `reply`.
+  Write `name=` only when other code reads that name (a trace filter, a
+  state key, an eval), and build one op per line (`a, b = f(), g()` names
+  neither).
+- Branch with `if_(cond, a).else_(b)` inside the `>>` chain. Never build a
+  `BranchOp` or `Branch` yourself.
+- An op that raises does not raise: the run's result has `"$errors"`.
+  Check for it.
+- To upgrade operonx: `uv lock --upgrade-package operonx && uv sync`, then `uv run operonx guide`, then
+  re-read `.operonx/guide/README.md`. After adding an operonx package
+  (`uv add operonx-agents`), run `uv run operonx guide`.
+
+## operonx guides
+
+<!-- operonx:guide -->
+Installed: operonx 1.18.1. Read `.operonx/guide/README.md` first: it lists every
+page of every installed operonx package, each tested against that version.
+Upgrade: `uv lock --upgrade-package operonx && uv sync`, then `uv run operonx guide`
+(after `uv add operonx-agents` or `operonx-kb`, just `uv run operonx guide`).
+Names come from variables: write `name=` only when other code reads the name,
+one op per line. Branch with `if_(cond, a).else_(b)` in the `>>` chain, never a
+hand-built `BranchOp`.
+<!-- /operonx:guide -->
