@@ -20,3 +20,5 @@ docs/source/
 # the knowledge base built from the photos (internal material)
 kb/
 newdata/
+*.pdf
+*.docx

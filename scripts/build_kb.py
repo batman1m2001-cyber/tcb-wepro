@@ -6,7 +6,8 @@ Sources:
 - Word files in newdata/*.docx, converted with their headings and tables;
 - internal posts in newdata/*.txt (separated by =====), with previews and copies dropped
   (a post whose 8-word shingles are >=90% inside a longer post, or >=75% when it ends "… Xem thêm");
-- PDFs in newdata/*.pdf, text extracted page by page.
+- PDFs in newdata/*.pdf, text extracted page by page;
+- documents written by hand in kb/_docs/*.md (e.g. a PDF whose text layer is broken), copied as is.
 
 Two short wave-1 summaries are dropped because a longer version of the same notebook arrived in
 wave 2 (SUPERSEDED). kb/ and newdata/ are gitignored: internal material, public repo.
@@ -26,6 +27,7 @@ KB = Path(__file__).resolve().parents[1] / "kb"
 ROOT = KB.parent
 PAGE_DIRS = [KB / "_pages", KB / "_pages2"]
 NEW = ROOT / "newdata"
+HAND = KB / "_docs"
 SUPERSEDED = {"word/notebook-ban-tin-noi-bo.docx", "word/notebook-wepro-AI.docx"}
 
 # source path -> (slug, title, one-line summary)
@@ -294,6 +296,10 @@ def main() -> None:
     docs = photo_docs() + word_docs()
     posts, dropped = post_docs()
     docs += posts + pdf_docs()
+    for path in sorted(HAND.glob("*.md")):
+        text = path.read_text(encoding="utf-8")
+        title = text.splitlines()[0].lstrip("# ").strip()
+        docs.append((path.stem, title, "chép tay", text))
     for slug, _, _, text in docs:
         (KB / f"{slug}.md").write_text(text, encoding="utf-8")
     idx = [
