@@ -3,8 +3,37 @@
 # Secrets are `${VAR}` here (`${VAR:default}` when optional) and their
 # values live in .env; list every name in .env.example.
 
+# The tutor: answers from the documents and writes quiz questions.
+# Claude Haiku 5.5 through OpenRouter. On a grounded Vietnamese test it
+# matched GPT-5.6 Luna, Qwen3.8 Flash, DeepSeek V4 Flash and Gemini 3.8
+# Flash (3/3 each) at the lowest input price, which is what RAG spends.
+# OpenRouter is a shared gateway: a 429 wants backoff, not a re-prompt.
 llm:assistant:
-  api_type: openai          # openai | azure | vllm | gemini | anthropic
-  api_key: ${LLM_API_KEY}
-  base_url: ${LLM_BASE_URL:https://api.openai.com/v1}
-  model: ${LLM_MODEL:gpt-4o-mini}
+  api_type: openai
+  api_key: ${OPENROUTER_API_KEY}
+  base_url: https://openrouter.ai/api/v1
+  model: ${LLM_MODEL:anthropic/claude-haiku-5.5}
+  cost_per_input_token: 0.0000001
+  cost_per_output_token: 0.0000005
+  max_retries: 5
+  retry_base_delay: 5.0
+  retry_min_delay: 1.0
+  retry_max_delay: 30.0
+
+# The in-house endpoint (a small Gemma). Fast and free, for cheap steps
+# such as rewriting a question before search.
+llm:inhouse:
+  api_type: openai
+  api_key: ${INHOUSE_API_KEY}
+  base_url: ${INHOUSE_BASE_URL}
+  model: ${INHOUSE_MODEL:google/gemma-4-E2B-it}
+
+# Embeddings for search, through OpenRouter. bge-m3 is multilingual and
+# separated the right Vietnamese passage best of the three tried
+# (qwen3-embedding-8b, text-embedding-3-small); 1024 dims keeps the index small.
+embedding:docs:
+  api_type: openai
+  api_key: ${OPENROUTER_API_KEY}
+  base_url: https://openrouter.ai/api/v1
+  model: baai/bge-m3
+  dimensions: 1024
