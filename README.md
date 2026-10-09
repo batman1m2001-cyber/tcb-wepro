@@ -11,7 +11,7 @@ around an `LLMOp` that calls the `llm:assistant` model from
 ```bash
 uv sync
 uv run pytest          # offline: the tests answer with a local fake model
-cp .env.example .env   # then set LLM_API_KEY (and LLM_BASE_URL / LLM_MODEL if not OpenAI)
+cp .env.example .env   # then set OPENROUTER_API_KEY (and the in-house endpoint)
 ```
 
 ## Serve

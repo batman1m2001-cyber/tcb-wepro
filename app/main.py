@@ -1,7 +1,7 @@
 """tcb-wepro: one HTTP service that answers with a model.
 
 POST /chat:8000 {"question": ...} ──► chat_flow ──► {answer, error}
-                                        └── llm:assistant (resources.yaml; LLM_API_KEY in .env)
+                                        └── llm:assistant (resources.yaml; OPENROUTER_API_KEY in .env)
 
 Every service and job of the project is declared here; operonx.toml only
 points at `APP`.
