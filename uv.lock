@@ -417,7 +417,7 @@ wheels = [
 
 [[package]]
 name = "operonx"
-version = "1.19.0"
+version = "1.19.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "orjson" },
@@ -426,9 +426,9 @@ dependencies = [
     { name = "rich" },
     { name = "tomli", marker = "python_full_version < '3.11'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/46/ce/1b1385d4efca64dddbbafcb8f16e5da3d536d4f5d735eb3e50b41accd533/operonx-1.19.0.tar.gz", hash = "sha256:699c63b108a057ff71129b1d41eae05a76e3e6a62c76a4ce9c1e5e5418c18a19", size = 747897, upload-time = "2026-10-10T03:48:27.494Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/87/f6/8f08f5e497b27f3a7e0eaccee2d104fe43ffb0414508fddb568434d20dd8/operonx-1.19.2.tar.gz", hash = "sha256:a5e278f13910c3f03b35a07b6a436a220eb4915c75a369db491927915bc2324c", size = 748478, upload-time = "2026-10-10T04:14:46.021Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/dc/9c/fa748a8c8b26fac9e16a1c8d2114bcd83140bd67ec51dd32bfadf234e36e/operonx-1.19.0-py3-none-any.whl", hash = "sha256:04f3deeb9f93b95b224ecb2d58996611a26f3ede156064a07d99b7fb94deb68e", size = 922546, upload-time = "2026-10-10T03:48:25.926Z" },
+    { url = "https://files.pythonhosted.org/packages/05/41/6d2abf06ede670ab6d12d674535b8c6b88408a92c7f911900e77607e4766/operonx-1.19.2-py3-none-any.whl", hash = "sha256:dfcb2140a60b95b693693c826905c6db22599cac9b1dc08f2bd73d006405053c", size = 923133, upload-time = "2026-10-10T04:14:44.386Z" },
 ]
 
 [package.optional-dependencies]
@@ -848,7 +848,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "httpx", marker = "extra == 'test'", specifier = ">=0.24" },
-    { name = "operonx", extras = ["serve", "openai"], specifier = ">=1.19.0" },
+    { name = "operonx", extras = ["serve", "openai"], specifier = ">=1.19.2" },
     { name = "pytest", marker = "extra == 'test'", specifier = ">=8" },
     { name = "python-dotenv", specifier = ">=1.0" },
 ]
