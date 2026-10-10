@@ -71,7 +71,7 @@ name = "exceptiongroup"
 version = "1.3.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "typing-extensions", marker = "python_full_version < '3.13'" },
+    { name = "typing-extensions", marker = "python_full_version < '3.11'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/50/79/66800aadf48771f6b62f7eb014e352e5d06856655206165d775e675a02c9/exceptiongroup-1.3.1.tar.gz", hash = "sha256:8b412432c6055b0b7d14c310000ae93352ed6754f70fa8f7c34141f91c4e3219", size = 30371, upload-time = "2025-11-21T23:01:54.787Z" }
 wheels = [
@@ -417,7 +417,7 @@ wheels = [
 
 [[package]]
 name = "operonx"
-version = "1.18.1"
+version = "1.19.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "orjson" },
@@ -426,9 +426,9 @@ dependencies = [
     { name = "rich" },
     { name = "tomli", marker = "python_full_version < '3.11'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ed/2e/fc6ca80477bb5935bda255963b784c0021f759c39ffb55e2801787c58df1/operonx-1.18.1.tar.gz", hash = "sha256:ddabb796bd81660d897255a39ed86b86614039b70482934a84d82b2a7e20203e", size = 740200, upload-time = "2026-10-09T08:19:13.451Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/46/ce/1b1385d4efca64dddbbafcb8f16e5da3d536d4f5d735eb3e50b41accd533/operonx-1.19.0.tar.gz", hash = "sha256:699c63b108a057ff71129b1d41eae05a76e3e6a62c76a4ce9c1e5e5418c18a19", size = 747897, upload-time = "2026-10-10T03:48:27.494Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/00/bc/09387ef49f1917d76101101f4d8e941def6bb8386197d8681330ed2b4d3c/operonx-1.18.1-py3-none-any.whl", hash = "sha256:e8cc3bb5db578167162021eff34bbd8901ce0a23e726fcb0888369c325b494b1", size = 914350, upload-time = "2026-10-09T08:19:11.981Z" },
+    { url = "https://files.pythonhosted.org/packages/dc/9c/fa748a8c8b26fac9e16a1c8d2114bcd83140bd67ec51dd32bfadf234e36e/operonx-1.19.0-py3-none-any.whl", hash = "sha256:04f3deeb9f93b95b224ecb2d58996611a26f3ede156064a07d99b7fb94deb68e", size = 922546, upload-time = "2026-10-10T03:48:25.926Z" },
 ]
 
 [package.optional-dependencies]
@@ -848,7 +848,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "httpx", marker = "extra == 'test'", specifier = ">=0.24" },
-    { name = "operonx", extras = ["serve", "openai"], specifier = ">=1.18.1" },
+    { name = "operonx", extras = ["serve", "openai"], specifier = ">=1.19.0" },
     { name = "pytest", marker = "extra == 'test'", specifier = ">=8" },
     { name = "python-dotenv", specifier = ">=1.0" },
 ]

@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "A chat service: one LLMOp on the llm:assistant model."
 requires-python = ">=3.10"
 dependencies = [
-    "operonx[serve,openai]>=1.18.1",
+    "operonx[serve,openai]>=1.19.0",
     "python-dotenv>=1.0",  # operonx.bootstrap() reads .env with it
 ]
 
