@@ -16,18 +16,39 @@ services and jobs.
 ## The ladder
 
 - **op**: `@op` in `ops.py`. One step of logic; it returns a dict literal.
-- **graph**: `@graph` in `graph.py`. Wires ops with `>>`. `ingress()` and
-  `egress()` are its doors: items in, items out.
+- **graph**: `@graph` in `graph.py`. Wires ops with `>>`. Its parameters
+  are what it is given (a request body, a job item); the outputs of the
+  ops wired to `END` are the answer.
 - **Job**: runs a graph once per item of its `items` (a list, a function
   that yields them, or a `.jsonl` file) and keeps every result in its
   record. `reduce=` runs one graph over all the results; `steps=[...]`
-  runs jobs in order as one command.
-- **Service**: a graph behind `http(...)`, `websocket(...)`, `webhook(...)`
-  or `schedule(...)`.
+  runs jobs in order as one command; `schedule=schedule(at="07:00")` also
+  runs it on a clock inside `operonx serve`.
+- **Service**: a graph behind `http(...)`, `webhook(...)`, `schedule(...)`
+  or `websocket(...)`.
 - **Application**: `APP` in `app/main.py`. Declare every service and job
   there.
 - **operonx.toml**: only points the CLIs at `APP`, plus `[tracing]`. Never
-  put `[[serve]]` blocks in it.
+  put `[[serve]]` blocks in it (deprecated; removed in operonx 2.0).
+
+## Serving a graph
+
+- The graph's signature is the request: the JSON body and the query string
+  fill its parameters by name, and a parameter's default is used when the
+  caller leaves it out. A field the graph does not take, a required
+  parameter nobody sent, or a name in both query and body is answered `400`
+  before any run. Never write an op that unpacks a request dict.
+- The reply is the outputs of the ops wired to `END`, as one JSON object.
+  For a flat body, have the last op return those fields at its top level.
+- Check what a caller sent (an unknown id, a value out of range) in the
+  graph's first op; a raise there answers `500` with the run's trace id.
+- A body shaped by someone else (a mail server's webhook) goes whole to one
+  parameter: `Service(..., input="payload")`.
+- `ingress()` / `egress()` (doors) are only for a run that handles many
+  items: a websocket call, a stream of events. Never add them to a
+  request–reply graph.
+- Each tick of work over many items is a `Job` with `schedule=`, not a
+  loop inside one op.
 
 ## Never define a `@graph` inside a function
 
@@ -76,7 +97,7 @@ def answer_flow(question, k):  # a setting is a graph input
 uv run pytest                 # the tests: keep them green
 uv run operonx serve --list   # every service, and where it listens
 uv run operonx run --list     # every job
-uv run operonx serve          # serve every service
+uv run operonx serve          # serve every service (and run scheduled jobs on their clocks)
 uv run operonx run NAME       # run one job
 ```
 
@@ -98,7 +119,7 @@ uv run operonx run NAME       # run one job
 ## operonx guides
 
 <!-- operonx:guide -->
-Installed: operonx 1.19.0. Read `.operonx/guide/README.md` first: it lists every
+Installed: operonx 1.19.3. Read `.operonx/guide/README.md` first: it lists every
 page of every installed operonx package, each tested against that version.
 Upgrade: `uv lock --upgrade-package operonx && uv sync`, then `uv run operonx guide`
 (after `uv add operonx-agents` or `operonx-kb`, just `uv run operonx guide`).
